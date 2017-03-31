@@ -323,6 +323,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
                         e.printStackTrace();
                         worked = false;
                     }
+
                     mode.finish();
                 break;
             }
