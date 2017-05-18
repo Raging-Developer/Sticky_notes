@@ -1,14 +1,12 @@
 package app.sticky_notes;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,23 +15,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
-import static android.R.attr.onClick;
-import static app.sticky_notes.R.string.update;
-import static java.security.AccessController.getContext;
 
 
 public class Sticky_Activity extends AppCompatActivity implements OnClickListener
@@ -98,15 +86,16 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
     }
 
 
+    /**
+     * This definately was not working when I first upped to nuggart,
+     * now it is. Bastard!
+     * @param menu Menu item
+     * @return true always
+     */
     @Override public boolean onCreateOptionsMenu(Menu menu)
     {
-        super.onCreateOptionsMenu(menu);
-
         MenuInflater flate = getMenuInflater();
         flate.inflate(R.menu.sticky, menu);
-
-        ActionBar act_bar = getSupportActionBar();
-        act_bar.show();
 
         return true;
     }
@@ -225,7 +214,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
             String title = temp_holder.get_title();
             String note = temp_holder.get_note();
 
-            /**
+            /*
              * Use an intent to call an activity to edit the note
              */
             holder.txtNote.setOnClickListener(new OnClickListener()
@@ -247,7 +236,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
                 }
             });
 
-            /**
+            /*
              * Use my callback class to delete the note.
              * todo if the back arrow is clicked instead of the bin I need to return the colour to transparent
              */
@@ -323,7 +312,6 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
                         e.printStackTrace();
                         worked = false;
                     }
-
                     mode.finish();
                 break;
             }
