@@ -13,8 +13,6 @@ import android.widget.EditText;
 
 import java.util.Date;
 
-import static app.sticky_notes.R.array.font_size;
-
 /**
  * Add a note to the database.
  * Created by Christopher D. Harte on 13/07/2016.

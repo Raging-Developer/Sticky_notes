@@ -1,9 +1,14 @@
 package app.sticky_notes;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Save the preferences, which consist of font size only at the moment.
@@ -15,7 +20,6 @@ public class Prefs extends PreferenceActivity
     {
         super.onCreate(savedInstanceState);
 //        getFragmentManager().beginTransaction().replace(android.R.id.content, new Pref_frag()).commit();
-
 
         //All things being equal, this looks like it makes more sense.
         Pref_frag p = new Pref_frag();

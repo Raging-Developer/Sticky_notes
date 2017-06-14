@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import static app.sticky_notes.R.array.font_size;
-
 /**
  * Edit the note that was retrieved from the database.
  * Created by Christopher D. Harte on 13/07/2016.

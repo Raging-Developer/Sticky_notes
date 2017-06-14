@@ -1,6 +1,7 @@
 package app.sticky_notes;
 
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -102,7 +103,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 
     @Override public boolean onOptionsItemSelected(MenuItem item)
     {
-        //Fucking toolbar...
+        //toolbar... wish they would make their minds up
         switch (item.getItemId())
         {
             case R.id.about_this :
@@ -127,6 +128,8 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
                 finish();
                 break;
 
+            //Using a fragment will not reload the activity with the new saved font size,
+            //this way will. Otherwise I will have to use recreate() which is a bit overkill.
             case R.id.action_settings :
                 Intent p = new Intent("app.sticky_notes.PREFS");
                 startActivity(p);
