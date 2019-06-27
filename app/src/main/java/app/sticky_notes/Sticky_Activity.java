@@ -243,6 +243,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 
                     Intent i = new Intent("app.sticky_notes.EDIT_NOTE");
                     i.putExtra("fong", font_size);
+                    i.putExtra("fonz", font_name);
                     i.putExtra("note", note_body);
                     i.putExtra("row_id", record_no);
                     startActivity(i);

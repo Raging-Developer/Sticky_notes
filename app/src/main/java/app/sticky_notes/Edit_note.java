@@ -22,16 +22,16 @@ public class Edit_note extends Activity implements View.OnClickListener
     @Override protected void onCreate(Bundle savedInstanceState)
     {
         Button update_button;
-        int font_size;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit);
 
-        Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/Note_this.ttf" );
-
         Bundle b = getIntent().getExtras();
-        font_size = b.getInt("fong");
+        int font_size = b.getInt("fong");
+        String font_name = b.getString("fonz");
         row_id = b.getLong("row_id");
+
+        Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/" + font_name);
 
         utils = new Sticky_database_utils(this);
 
