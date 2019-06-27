@@ -35,10 +35,10 @@ public class Add_note extends Activity implements OnClickListener
         Bundle b = getIntent().getExtras();
         int font_size = b.getInt("fong");
 
-        Button add_button = (Button) findViewById(R.id.button_add_add);
+        Button add_button = findViewById(R.id.button_add_add);
         add_button.setOnClickListener(this);
 
-        add_note = (EditText) findViewById(R.id.add_note);
+        add_note = findViewById(R.id.add_note);
         add_note.setTextSize(font_size);
         add_note.setTypeface(fonts);
 
@@ -57,6 +57,11 @@ public class Add_note extends Activity implements OnClickListener
 
                 try
                 {
+                    if (add_note.getText().toString().trim().length() == 0)
+                    {
+                        verks = false;
+                        break;
+                    }
                     utils.open();
                     utils.create_entry(date_title, add_note.getText().toString());
                     utils.close();
@@ -82,10 +87,10 @@ public class Add_note extends Activity implements OnClickListener
                 }
                 finally
                 {
+                    dia_build = new AlertDialog.Builder(this);
+
                     if (verks)
                     {
-                        dia_build = new AlertDialog.Builder(this);
-
                         dia_build.setMessage("Note has been added").setCancelable(false);
                         dia_build.setPositiveButton("Okay Dokey", new DialogInterface.OnClickListener()
                         {
@@ -94,10 +99,21 @@ public class Add_note extends Activity implements OnClickListener
                                 Add_note.this.finish();
                             }
                         });
-
-                        dia = dia_build.create();
-                        dia.show();
                     }
+                    else
+                    {
+                        dia_build.setMessage("Nothing to add").setCancelable(false);
+                        dia_build.setPositiveButton("Try it with text next time", new DialogInterface.OnClickListener()
+                        {
+                            @Override public void onClick(DialogInterface dialog, int which)
+                            {
+                                Add_note.this.finish();
+                            }
+                        });
+                    }
+
+                    dia = dia_build.create();
+                    dia.show();
                 }
             break;
         }

@@ -1,7 +1,6 @@
 package app.sticky_notes;
 
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -28,11 +27,11 @@ import java.util.ArrayList;
 public class Sticky_Activity extends AppCompatActivity implements OnClickListener
 {
     private ArrayList<Sticky_notes>    notes;
-    private Sticky_database_utils      utils;
+//    private Sticky_db_utils_kotlin utils;
+    private Sticky_database_utils utils;
     private static int                 font_size;
 
     private long record_no;
-    private int  record_position;
 
     RecyclerView               recycler_view;
     RecyclerView.LayoutManager resyc_layout_manager;
@@ -43,11 +42,11 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sticky);
 
-        Button add_button = (Button) findViewById(R.id.button_add);
+        Button add_button = findViewById(R.id.button_add);
         add_button.setOnClickListener(this);
 
         //recycler stuff
-        recycler_view = (RecyclerView) findViewById(R.id.recycler_list);
+        recycler_view =  findViewById(R.id.recycler_list);
         recycler_view.setHasFixedSize(false);
 
         resyc_layout_manager = new LinearLayoutManager(this);
@@ -56,6 +55,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
         font_size = get_font_size();
 
         // To initialise the array list for the adapter
+//        utils = new Sticky_db_utils_kotlin(this);
         utils = new Sticky_database_utils(this);
         utils.open();
         notes = utils.get_notes();
@@ -89,7 +89,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 
     /**
      * This definately was not working when I first upped to nuggart,
-     * now it is. Bastard!
+     * now it is. Because I am using the AppCompat theme?
      * @param menu Menu item
      * @return true always
      */
@@ -111,7 +111,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
                 a.putExtra("title", "A note taking app");
                 a.putExtra("text", "A very simple note taking app.\n"
                         + "After adding, short click to edit,\n"
-                        + "long click to delete, without notice unfortunately.\n");
+                        + "long click to get delete option.\n");
                 startActivity(a);
                 break;
 
@@ -159,7 +159,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
      *
      * @return the font size as an integer
      */
-    private int get_font_size()
+    public int get_font_size()
     {
         SharedPreferences get_prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String font_string = get_prefs.getString("fong", "24");
@@ -186,8 +186,8 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
             View_holder (View note_view)
             {
                 super(note_view);
-                txtTitle = (TextView) note_view.findViewById(R.id.item_title);
-                txtNote = (TextView) note_view.findViewById(R.id.item_note);
+                txtTitle = note_view.findViewById(R.id.item_title);
+                txtNote =  note_view.findViewById(R.id.item_note);
             }
         }
 
@@ -210,7 +210,10 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 
         @Override public void onBindViewHolder(final View_holder holder, final int position)
         {
-            Sticky_notes temp_holder = local_data.get(position);
+            //What is the point of a parameter if you are not going to use it?
+//            Sticky_notes temp_holder = local_data.get(position);
+            Sticky_notes temp_holder = local_data.get(holder.getAdapterPosition());
+
 
             Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/Note_this.ttf");
 
@@ -224,8 +227,9 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
             {
                 @Override public void onClick(View view)
                 {
-                    String note_body = local_data.get(position).get_note();
-                    record_no = Long.parseLong(local_data.get(position).get_row_id());
+                    String note_body = local_data.get(holder.getAdapterPosition()).get_note();
+                    record_no = Long.parseLong(local_data.get(holder.getAdapterPosition()).get_row_id());
+
 
                     Intent i = new Intent("app.sticky_notes.EDIT_NOTE");
                     i.putExtra("fong", font_size);
@@ -249,7 +253,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
                 {
                     holder.txtNote.setSelected(true);
 
-                    record_no = Long.parseLong(local_data.get(position).get_row_id());
+                    record_no = Long.parseLong(local_data.get(holder.getAdapterPosition()).get_row_id());
 
                     holder.txtNote.setBackgroundColor(Color.BLUE);
 
@@ -281,7 +285,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 
         @Override public void onDestroyActionMode(ActionMode mode)
         {
-            mode = null;
+//            mode = null;
         }
 
         @Override public boolean onCreateActionMode(ActionMode mode, Menu menu)

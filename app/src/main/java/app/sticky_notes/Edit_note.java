@@ -35,8 +35,8 @@ public class Edit_note extends Activity implements View.OnClickListener
 
         utils = new Sticky_database_utils(this);
 
-        edited_note = (EditText)findViewById(R.id.edit_text);
-        update_button = (Button)findViewById(R.id.button_edit_note);
+        edited_note = findViewById(R.id.edit_text);
+        update_button = findViewById(R.id.button_edit_note);
 
         edited_note.setText(b.getString("note"));
         edited_note.setTextSize(font_size);

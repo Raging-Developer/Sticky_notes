@@ -38,7 +38,7 @@ class Sticky_database_utils
 
     /**
      * Creates a new helper and opens the database for reading and writing.
-     * @throws SQLException
+     * @throws  SQLException
      */
     public void open() throws SQLException
     {
@@ -60,7 +60,7 @@ class Sticky_database_utils
      * @param note what ever is typed into the screen. A string
      * @return the result of the attempt to insert a row into the database. A long
      */
-    long create_entry(String title, String note)
+    public long create_entry(String title, String note)
     {
         ContentValues cv = new ContentValues();
         cv.put(key_title, title);
