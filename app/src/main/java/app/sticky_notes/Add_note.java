@@ -28,12 +28,13 @@ public class Add_note extends Activity implements OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_note);
 
-        Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/Note_this.ttf" );
-
         utils = new Sticky_database_utils(this);
 
         Bundle b = getIntent().getExtras();
         int font_size = b.getInt("fong");
+        String font_name = b.getString("fonz");
+
+        Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/" + font_name);
 
         Button add_button = findViewById(R.id.button_add_add);
         add_button.setOnClickListener(this);

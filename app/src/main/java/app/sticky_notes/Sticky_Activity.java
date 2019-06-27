@@ -26,10 +26,10 @@ import java.util.ArrayList;
 
 public class Sticky_Activity extends AppCompatActivity implements OnClickListener
 {
-    private ArrayList<Sticky_notes>    notes;
-//    private Sticky_db_utils_kotlin utils;
-    private Sticky_database_utils utils;
-    private static int                 font_size;
+    private ArrayList<Sticky_notes>     notes;
+    private Sticky_database_utils       utils;
+    private static int                  font_size;
+    private static String               font_name;
 
     private long record_no;
 
@@ -53,9 +53,9 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
         recycler_view.setLayoutManager(resyc_layout_manager);
 
         font_size = get_font_size();
+        font_name = get_font_name();
 
         // To initialise the array list for the adapter
-//        utils = new Sticky_db_utils_kotlin(this);
         utils = new Sticky_database_utils(this);
         utils.open();
         notes = utils.get_notes();
@@ -70,6 +70,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
         super.onResume();
 
         font_size = get_font_size();
+        font_name = get_font_name();
 
         load_adapter();
     }
@@ -81,6 +82,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
             case R.id.button_add :
                 Intent i = new Intent("app.sticky_notes.ADD_NOTE");
                 i.putExtra("fong", font_size);
+                i.putExtra("fonz", font_name);
                 startActivity(i);
                 break;
         }
@@ -168,15 +170,33 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
         return font_size;
     }
 
+    public String get_font_name()
+    {
+        SharedPreferences get_prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        font_name = get_prefs.getString("fonz", "Note_this.ttf");
+
+        return font_name;
+    }
+
     /**
      * New recycle view and adapter. No idea what was wrong with the listView adapter,
-     * but this is the way we have to do it now.
+     * but this is a lot more complex and difficult to manage. And no, you cannot have
+     * a seperator between items.
      *
      * @author Christopher D. Harte
      */
     class Resyc_adapter extends RecyclerView.Adapter<Resyc_adapter.View_holder>
     {
         private ArrayList<Sticky_notes> local_data;
+
+        /**
+         * RecycleView adapter that holds the arrayList
+         * @param data Sticky_notes
+         */
+        Resyc_adapter (ArrayList<Sticky_notes> data)
+        {
+            local_data = data;
+        }
 
         class View_holder extends RecyclerView.ViewHolder
         {
@@ -189,15 +209,6 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
                 txtTitle = note_view.findViewById(R.id.item_title);
                 txtNote =  note_view.findViewById(R.id.item_note);
             }
-        }
-
-        /**
-         * RecycleView adapter that holds the arrayList
-         * @param data Sticky_notes
-         */
-        Resyc_adapter (ArrayList<Sticky_notes> data)
-        {
-            local_data = data;
         }
 
         @Override public Resyc_adapter.View_holder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -214,8 +225,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 //            Sticky_notes temp_holder = local_data.get(position);
             Sticky_notes temp_holder = local_data.get(holder.getAdapterPosition());
 
-
-            Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/Note_this.ttf");
+            Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/" + font_name);
 
             String title = temp_holder.get_title();
             String note = temp_holder.get_note();
@@ -285,7 +295,6 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 
         @Override public void onDestroyActionMode(ActionMode mode)
         {
-//            mode = null;
         }
 
         @Override public boolean onCreateActionMode(ActionMode mode, Menu menu)

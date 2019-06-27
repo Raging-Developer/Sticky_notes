@@ -1,14 +1,9 @@
 package app.sticky_notes;
 
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 /**
  * Save the preferences, which consist of font size only at the moment.
