@@ -121,7 +121,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
                 Intent c = new Intent("app.sticky_notes.CREDIT");
                 c.putExtra("title", "Sticky paper the note taker");
                 c.putExtra("text", "Made by Chris Harte. Because he could!\n\n"
-                        + "The note font is Note_this taken from fontsquirrel.\n");
+                        + "The fonts are Note_this and IndieFlower taken from fontsquirrel.\n");
                 startActivity(c);
                 break;
 

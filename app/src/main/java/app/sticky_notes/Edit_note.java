@@ -58,6 +58,12 @@ public class Edit_note extends Activity implements View.OnClickListener
 
                 try
                 {
+                    if (edited_note.getText().toString().trim().length() == 0)
+                    {
+                        verks = false;
+                        break;
+                    }
+
                     utils.open();
                     utils.edit_entry(edited_note.getText().toString(), row_id);
                     utils.close();
@@ -85,11 +91,10 @@ public class Edit_note extends Activity implements View.OnClickListener
                 }
                 finally
                 {
+                    dia_build = new AlertDialog.Builder(this);
+
                     if (verks)
                     {
-
-                        dia_build = new AlertDialog.Builder(this);
-
                         dia_build.setTitle("Edit applied");
                         dia_build.setMessage("and it cannot be undone or rolled back");
                         dia_build.setPositiveButton("Okay", new DialogInterface.OnClickListener()
@@ -99,10 +104,21 @@ public class Edit_note extends Activity implements View.OnClickListener
                                 Edit_note.this.finish();
                             }
                         });
-
-                        dia = dia_build.create();
-                        dia.show();
                     }
+                    else
+                    {
+                        dia_build.setMessage("Nothing to add").setCancelable(false);
+                        dia_build.setPositiveButton("Needs more text", new DialogInterface.OnClickListener()
+                        {
+                            @Override public void onClick(DialogInterface dialog, int which)
+                            {
+                                Edit_note.this.finish();
+                            }
+                        });
+                    }
+
+                    dia = dia_build.create();
+                    dia.show();
                 }
                 break;
         }
