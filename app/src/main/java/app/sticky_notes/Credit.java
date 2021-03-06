@@ -12,13 +12,18 @@ public class Credit extends Activity
 {
     @Override protected void onCreate(Bundle savedInstanceState)
     {
+        String title = "";
+        String text = "";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.credit);
-        TextView credit = (TextView) findViewById(R.id.credit);
+        TextView credit = findViewById(R.id.credit);
 
         Bundle b = getIntent().getExtras();
-        String title = b.getString("title");
-        String text = b.getString("text");
+        if (b != null)
+        {
+            title = b.getString("title");
+            text = b.getString("text");
+        }
 
         setTitle(title);
         credit.setText(text);

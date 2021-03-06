@@ -16,4 +16,16 @@
         <item>12</item>
     </string-array>
 
+    <!--xxxxxx -->
+
+    <string-array name="font_name">
+        <item>Note</item>
+        <item>Flower</item>
+    </string-array>
+
+    <string-array name="font_ttf">
+        <item>Note_this.ttf</item>
+        <item>IndieFlower.ttf</item>
+    </string-array>
+
 </resources>

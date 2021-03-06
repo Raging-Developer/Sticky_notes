@@ -22,6 +22,8 @@ public class Add_note extends Activity implements OnClickListener
     private Sticky_database_utils utils;
     private EditText              add_note;
     private String                date_title;
+    private int font_size;
+    private  String font_name;
 
     @Override protected void onCreate(Bundle savedInstanceState)
     {
@@ -31,8 +33,12 @@ public class Add_note extends Activity implements OnClickListener
         utils = new Sticky_database_utils(this);
 
         Bundle b = getIntent().getExtras();
-        int font_size = b.getInt("fong");
-        String font_name = b.getString("fonz");
+
+        if (b != null)
+        {
+            font_size = b.getInt("fong");
+            font_name = b.getString("fonz");
+        }
 
         Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/" + font_name);
 
@@ -43,7 +49,7 @@ public class Add_note extends Activity implements OnClickListener
         add_note.setTextSize(font_size);
         add_note.setTypeface(fonts);
 
-        date_title = (String) DateFormat.format("\n dd/MM/yyyy hh:mm:ss", new Date());
+        date_title = (String) DateFormat.format("\n dd/MM/yyyy HH:mm:ss", new Date());
     }
 
     @Override public void onClick(View v)
@@ -51,72 +57,69 @@ public class Add_note extends Activity implements OnClickListener
         AlertDialog         dia;
         AlertDialog.Builder dia_build;
 
-        switch (v.getId())
+        if (v.getId() == R.id.button_add_add)
         {
-            case R.id.button_add_add :
-                boolean verks = true;
+            boolean verks = true;
 
-                try
-                {
-                    if (add_note.getText().toString().trim().length() == 0)
-                    {
-                        verks = false;
-                        break;
-                    }
-                    utils.open();
-                    utils.create_entry(date_title, add_note.getText().toString());
-                    utils.close();
-                }
-                catch (Exception e)
+            try
+            {
+                if (add_note.getText().toString().trim().length() == 0)
                 {
                     verks = false;
-                    String error = e.toString();
-                    dia_build = new AlertDialog.Builder(this);
+                    return;
+                }
+                utils.open();
+                utils.create_entry(date_title, add_note.getText().toString());
+                utils.close();
+            }
+            catch (Exception e)
+            {
+                verks = false;
+                String error = e.toString();
+                dia_build = new AlertDialog.Builder(this);
 
-                    dia_build.setTitle("Borked");
-                    dia_build.setMessage("Cock up alert : " + error).setCancelable(false);
-                    dia_build.setPositiveButton("Clear", new DialogInterface.OnClickListener()
+                dia_build.setTitle("Borked");
+                dia_build.setMessage("Cock up alert : " + error).setCancelable(false);
+                dia_build.setPositiveButton("Clear", new DialogInterface.OnClickListener()
+                {
+                    @Override public void onClick(DialogInterface dialog, int which)
+                    {
+                        Add_note.this.finish();
+                    }
+                });
+
+                dia = dia_build.create();
+                dia.show();
+            } finally
+            {
+                dia_build = new AlertDialog.Builder(this);
+
+                if (verks)
+                {
+                    dia_build.setMessage("Note has been added").setCancelable(false);
+                    dia_build.setPositiveButton("Okay Dokey", new DialogInterface.OnClickListener()
                     {
                         @Override public void onClick(DialogInterface dialog, int which)
                         {
                             Add_note.this.finish();
                         }
                     });
-
-                    dia = dia_build.create();
-                    dia.show();
                 }
-                finally
+                else
                 {
-                    dia_build = new AlertDialog.Builder(this);
-
-                    if (verks)
+                    dia_build.setMessage("Nothing to add").setCancelable(false);
+                    dia_build.setPositiveButton("Try it with text next time", new DialogInterface.OnClickListener()
                     {
-                        dia_build.setMessage("Note has been added").setCancelable(false);
-                        dia_build.setPositiveButton("Okay Dokey", new DialogInterface.OnClickListener()
+                        @Override public void onClick(DialogInterface dialog, int which)
                         {
-                            @Override public void onClick(DialogInterface dialog, int which)
-                            {
-                                Add_note.this.finish();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        dia_build.setMessage("Nothing to add").setCancelable(false);
-                        dia_build.setPositiveButton("Try it with text next time", new DialogInterface.OnClickListener()
-                        {
-                            @Override public void onClick(DialogInterface dialog, int which)
-                            {
-                                Add_note.this.finish();
-                            }
-                        });
-                    }
-
-                    dia = dia_build.create();
-                    dia.show();
+                            Add_note.this.finish();
+                        }
+                    });
                 }
-            break;
+
+                dia = dia_build.create();
+                dia.show();
+            }
         }
     }
 }

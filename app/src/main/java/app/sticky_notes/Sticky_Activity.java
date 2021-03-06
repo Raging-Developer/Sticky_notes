@@ -27,11 +27,11 @@ import java.util.ArrayList;
 public class Sticky_Activity extends AppCompatActivity implements OnClickListener
 {
     private ArrayList<Sticky_notes>     notes;
-    private Sticky_database_utils       utils;
+    public Sticky_database_utils        utils;
     private static int                  font_size;
     private static String               font_name;
 
-    private long record_no;
+    public long record_no;
 
     RecyclerView               recycler_view;
     RecyclerView.LayoutManager resyc_layout_manager;
@@ -77,14 +77,12 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 
     @Override public void onClick(View v)
     {
-        switch (v.getId())
+        if (v.getId() == R.id.button_add)
         {
-            case R.id.button_add :
-                Intent i = new Intent("app.sticky_notes.ADD_NOTE");
-                i.putExtra("fong", font_size);
-                i.putExtra("fonz", font_name);
-                startActivity(i);
-                break;
+            Intent i = new Intent("app.sticky_notes.ADD_NOTE");
+            i.putExtra("fong", font_size);
+            i.putExtra("fonz", font_name);
+            startActivity(i);
         }
     }
 
@@ -106,36 +104,37 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
     @Override public boolean onOptionsItemSelected(MenuItem item)
     {
         //toolbar... wish they would make their minds up
-        switch (item.getItemId())
+        int itemId = item.getItemId();
+        if (itemId == R.id.about_this)
         {
-            case R.id.about_this :
-                Intent a = new Intent("app.sticky_notes.ABOUT");
-                a.putExtra("title", "A note taking app");
-                a.putExtra("text", "A very simple note taking app.\n"
-                        + "After adding, short click to edit,\n"
-                        + "long click to get delete option.\n");
-                startActivity(a);
-                break;
-
-            case R.id.credit :
-                Intent c = new Intent("app.sticky_notes.CREDIT");
-                c.putExtra("title", "Sticky paper the note taker");
-                c.putExtra("text", "Made by Chris Harte. Because he could!\n\n"
-                        + "The fonts are Note_this and IndieFlower taken from fontsquirrel.\n");
-                startActivity(c);
-                break;
+            Intent a = new Intent("app.sticky_notes.ABOUT");
+            a.putExtra("title", "A note taking app");
+            a.putExtra("text", "A very simple note taking app.\n"
+                    + "After adding, short click to edit,\n"
+                    + "long click to get delete option.\n");
+            startActivity(a);
+        }
+        else if (itemId == R.id.credit)
+        {
+            Intent c = new Intent("app.sticky_notes.CREDIT");
+            c.putExtra("title", "Sticky paper the note taker");
+            c.putExtra("text", "Made by Chris Harte. Because he could!\n\n"
+                    + "The fonts are Note_this and IndieFlower taken from fontsquirrel.\n");
+            startActivity(c);
 
             // I do not have a home icon, as per the new diktat from Evil Google.
-            case android.R.id.home :
-                finish();
-                break;
+        }
+        else if (itemId == android.R.id.home)
+        {
+            finish();
 
             //Using a fragment will not reload the activity with the new saved font size,
             //this way will. Otherwise I will have to use recreate() which is a bit overkill.
-            case R.id.action_settings :
-                Intent p = new Intent("app.sticky_notes.PREFS");
-                startActivity(p);
-                break;
+        }
+        else if (itemId == R.id.action_settings)
+        {
+            Intent p = new Intent("app.sticky_notes.PREFS");
+            startActivity(p);
         }
         return false;
     }
@@ -144,7 +143,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
     * For structual changes ie added or removed, this from the manual
     * LayoutManagers will be forced to fully rebind and relayout all visible views.
     */
-    private void load_adapter()
+    public void load_adapter()
     {
         utils.open();
         notes = utils.get_notes();
@@ -165,7 +164,11 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
     {
         SharedPreferences get_prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String font_string = get_prefs.getString("fong", "24");
-        font_size = Integer.parseInt(font_string);
+
+        if (font_string != null)
+        {
+            font_size = Integer.parseInt(font_string);
+        }
 
         return font_size;
     }
@@ -178,22 +181,15 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
         return font_name;
     }
 
-    /**
-     * New recycle view and adapter. No idea what was wrong with the listView adapter,
-     * but this is a lot more complex and difficult to manage. And no, you cannot have
-     * a seperator between items.
-     *
-     * @author Christopher D. Harte
-     */
-    class Resyc_adapter extends RecyclerView.Adapter<Resyc_adapter.View_holder>
+    private class Resyc_adapter extends RecyclerView.Adapter<Resyc_adapter.View_holder>
     {
-        private ArrayList<Sticky_notes> local_data;
+        private final ArrayList<Sticky_notes> local_data;
 
         /**
          * RecycleView adapter that holds the arrayList
          * @param data Sticky_notes
          */
-        Resyc_adapter (ArrayList<Sticky_notes> data)
+        Resyc_adapter(ArrayList<Sticky_notes> data)
         {
             local_data = data;
         }
@@ -214,18 +210,18 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
         @Override public Resyc_adapter.View_holder onCreateViewHolder(ViewGroup parent, int viewType)
         {
             LayoutInflater flater = LayoutInflater.from(parent.getContext());
-            View_holder vh = new View_holder(flater.inflate(R.layout.note_item, parent, false));
+            Resyc_adapter.View_holder vh = new Resyc_adapter.View_holder(flater.inflate(R.layout.note_item, parent, false));
 
             return vh;
         }
 
-        @Override public void onBindViewHolder(final View_holder holder, final int position)
+        @Override public void onBindViewHolder(final Resyc_adapter.View_holder holder, final int position)
         {
             //What is the point of a parameter if you are not going to use it?
 //            Sticky_notes temp_holder = local_data.get(position);
             Sticky_notes temp_holder = local_data.get(holder.getAdapterPosition());
 
-            Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/" + font_name);
+            Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/" + Sticky_Activity.font_name);
 
             String title = temp_holder.get_title();
             String note = temp_holder.get_note();
@@ -233,7 +229,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
             /*
              * Use an intent to call an activity to edit the note
              */
-            holder.txtNote.setOnClickListener(new OnClickListener()
+            holder.txtNote.setOnClickListener(new View.OnClickListener()
             {
                 @Override public void onClick(View view)
                 {
@@ -242,8 +238,8 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 
 
                     Intent i = new Intent("app.sticky_notes.EDIT_NOTE");
-                    i.putExtra("fong", font_size);
-                    i.putExtra("fonz", font_name);
+                    i.putExtra("fong", Sticky_Activity.font_size);
+                    i.putExtra("fonz", Sticky_Activity.font_name);
                     i.putExtra("note", note_body);
                     i.putExtra("row_id", record_no);
                     startActivity(i);
@@ -276,7 +272,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
             });
 
             holder.txtNote.setTypeface(fonts);
-            holder.txtNote.setTextSize(font_size);
+            holder.txtNote.setTextSize(Sticky_Activity.font_size);
             holder.txtTitle.setText(title);
             holder.txtNote.setText(note);
         }
@@ -289,6 +285,7 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
 
     private class My_action_callback implements ActionMode.Callback
     {
+
         @Override public boolean onPrepareActionMode(ActionMode mode, Menu menu)
         {
             return false;
@@ -311,26 +308,24 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
         {
             boolean worked = true;
 
-            switch (menu.getItemId())
+            if (menu.getItemId() == R.id.to_delete)
             {
-                case R.id.to_delete :
-                    try
-                    {
-                        utils.open();
-                        utils.delete_entry(record_no);
-                        utils.close();
+                try
+                {
+                    utils.open();
+                    utils.delete_entry(record_no);
+                    utils.close();
 
-                        //For structual changes ie added or removed, this from the manual
-                        //LayoutManagers will be forced to fully rebind and relayout all visible views.
-                        load_adapter();
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                        worked = false;
-                    }
-                    mode.finish();
-                break;
+                    //For structual changes ie added or removed, this from the manual
+                    //LayoutManagers will be forced to fully rebind and relayout all visible views.
+                    load_adapter();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    worked = false;
+                }
+                mode.finish();
             }
             return worked;
         }

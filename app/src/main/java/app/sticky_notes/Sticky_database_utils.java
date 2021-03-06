@@ -110,7 +110,7 @@ class Sticky_database_utils
      */
     public String get_a_note (long l) throws SQLException
     {
-        Cursor c = my_database.query(database_table, columns, key_row_id + "=" + 1, null, null, null, null);
+        Cursor c = my_database.query(database_table, columns, key_row_id + "=" + l, null, null, null, null);
 
         if (c != null)
         {

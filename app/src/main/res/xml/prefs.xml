@@ -6,4 +6,10 @@
         android:key="fong"
         android:summary="Click here to choose a font size"
         android:title="Select Font Size" />
+    <ListPreference
+        android:entries="@array/font_name"
+        android:entryValues="@array/font_ttf"
+        android:key="fonz"
+        android:summary="Click here to change font"
+        android:title="Select Font" />
 </PreferenceScreen>

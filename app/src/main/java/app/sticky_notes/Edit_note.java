@@ -18,6 +18,8 @@ public class Edit_note extends Activity implements View.OnClickListener
     private Sticky_database_utils utils;
     private Long row_id;
     private EditText edited_note;
+    private int font_size;
+    private String font_name;
 
     @Override protected void onCreate(Bundle savedInstanceState)
     {
@@ -27,9 +29,13 @@ public class Edit_note extends Activity implements View.OnClickListener
         setContentView(R.layout.edit);
 
         Bundle b = getIntent().getExtras();
-        int font_size = b.getInt("fong");
-        String font_name = b.getString("fonz");
-        row_id = b.getLong("row_id");
+
+        if (b != null)
+        {
+            font_size = b.getInt("fong");
+            font_name = b.getString("fonz");
+            row_id = b.getLong("row_id");
+        }
 
         Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/" + font_name);
 
@@ -38,7 +44,10 @@ public class Edit_note extends Activity implements View.OnClickListener
         edited_note = findViewById(R.id.edit_text);
         update_button = findViewById(R.id.button_edit_note);
 
-        edited_note.setText(b.getString("note"));
+        if (b != null)
+        {
+            edited_note.setText(b.getString("note"));
+        }
         edited_note.setTextSize(font_size);
         edited_note.setTypeface(fonts);
 
@@ -51,76 +60,73 @@ public class Edit_note extends Activity implements View.OnClickListener
         AlertDialog.Builder dia_build;
         AlertDialog dia;
 
-        switch (v.getId())
+        if (v.getId() == R.id.button_edit_note)
         {
-            case R.id.button_edit_note :
-                boolean verks = true;
+            boolean verks = true;
 
-                try
-                {
-                    if (edited_note.getText().toString().trim().length() == 0)
-                    {
-                        verks = false;
-                        break;
-                    }
-
-                    utils.open();
-                    utils.edit_entry(edited_note.getText().toString(), row_id);
-                    utils.close();
-                }
-                catch (Exception e)
+            try
+            {
+                if (edited_note.getText().toString().trim().length() == 0)
                 {
                     verks = false;
-                    String error = e.toString();
+                    return;
+                }
 
-                    dia_build = new AlertDialog.Builder(this);
+                utils.open();
+                utils.edit_entry(edited_note.getText().toString(), row_id);
+                utils.close();
+            }
+            catch (Exception e)
+            {
+                verks = false;
+                String error = e.toString();
 
-                    dia_build.setTitle("Borked");
-                    dia_build.setMessage("did not work because : " + error);
-                    dia_build.setPositiveButton("Damn!", new DialogInterface.OnClickListener()
+                dia_build = new AlertDialog.Builder(this);
+
+                dia_build.setTitle("Borked");
+                dia_build.setMessage("did not work because : " + error);
+                dia_build.setPositiveButton("Damn!", new DialogInterface.OnClickListener()
+                {
+                    @Override public void onClick(DialogInterface dialog, int which)
+                    {
+                        Edit_note.this.finish();
+                    }
+                });
+
+                dia = dia_build.create();
+                dia.show();
+
+            } finally
+            {
+                dia_build = new AlertDialog.Builder(this);
+
+                if (verks)
+                {
+                    dia_build.setTitle("Edit applied");
+                    dia_build.setMessage("and it cannot be undone or rolled back");
+                    dia_build.setPositiveButton("Okay", new DialogInterface.OnClickListener()
                     {
                         @Override public void onClick(DialogInterface dialog, int which)
                         {
                             Edit_note.this.finish();
                         }
                     });
-
-                    dia = dia_build.create();
-                    dia.show();
-
                 }
-                finally
+                else
                 {
-                    dia_build = new AlertDialog.Builder(this);
-
-                    if (verks)
+                    dia_build.setMessage("Nothing to add").setCancelable(false);
+                    dia_build.setPositiveButton("Needs more text", new DialogInterface.OnClickListener()
                     {
-                        dia_build.setTitle("Edit applied");
-                        dia_build.setMessage("and it cannot be undone or rolled back");
-                        dia_build.setPositiveButton("Okay", new DialogInterface.OnClickListener()
+                        @Override public void onClick(DialogInterface dialog, int which)
                         {
-                            @Override public void onClick(DialogInterface dialog, int which)
-                            {
-                                Edit_note.this.finish();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        dia_build.setMessage("Nothing to add").setCancelable(false);
-                        dia_build.setPositiveButton("Needs more text", new DialogInterface.OnClickListener()
-                        {
-                            @Override public void onClick(DialogInterface dialog, int which)
-                            {
-                                Edit_note.this.finish();
-                            }
-                        });
-                    }
-
-                    dia = dia_build.create();
-                    dia.show();
+                            Edit_note.this.finish();
+                        }
+                    });
                 }
-                break;
+
+                dia = dia_build.create();
+                dia.show();
+            }
         }
     }
 }
