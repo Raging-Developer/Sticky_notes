@@ -7,16 +7,16 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/action_settings"/>
 
     <item
         android:id="@+id/about_this"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:title="@string/aboot" />
     <item
         android:id="@+id/credit"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:title="@string/credits" />
 
 </menu>

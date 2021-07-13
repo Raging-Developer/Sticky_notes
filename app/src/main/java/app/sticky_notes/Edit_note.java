@@ -16,44 +16,35 @@ import android.widget.EditText;
 public class Edit_note extends Activity implements View.OnClickListener
 {
     private Sticky_database_utils utils;
-    private Long row_id;
-    private EditText edited_note;
-    private int font_size;
-    private String font_name;
+    private Long                  row_id;
+    private EditText              edited_note;
+    private int                   font_size;
+    private String                font_name;
 
     @Override protected void onCreate(Bundle savedInstanceState)
     {
-        Button update_button;
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit);
-
-        Bundle b = getIntent().getExtras();
+        edited_note          = findViewById(R.id.edit_text);
+        Button update_button = findViewById(R.id.button_edit_note);
+        Bundle b             = getIntent().getExtras();
 
         if (b != null)
         {
             font_size = b.getInt("fong");
             font_name = b.getString("fonz");
-            row_id = b.getLong("row_id");
+            row_id    = b.getLong("row_id");
+            edited_note.setText(b.getString("note"));
         }
 
         Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/" + font_name);
+        utils          = new Sticky_database_utils(this);
 
-        utils = new Sticky_database_utils(this);
-
-        edited_note = findViewById(R.id.edit_text);
-        update_button = findViewById(R.id.button_edit_note);
-
-        if (b != null)
-        {
-            edited_note.setText(b.getString("note"));
-        }
         edited_note.setTextSize(font_size);
         edited_note.setTypeface(fonts);
 
         update_button.setOnClickListener(this);
     }
-
 
     @Override public void onClick(View v)
     {
@@ -85,18 +76,13 @@ public class Edit_note extends Activity implements View.OnClickListener
 
                 dia_build.setTitle("Borked");
                 dia_build.setMessage("did not work because : " + error);
-                dia_build.setPositiveButton("Damn!", new DialogInterface.OnClickListener()
-                {
-                    @Override public void onClick(DialogInterface dialog, int which)
-                    {
-                        Edit_note.this.finish();
-                    }
-                });
+                dia_build.setPositiveButton("Damn!", (dialog, which) -> Edit_note.this.finish());
 
                 dia = dia_build.create();
                 dia.show();
 
-            } finally
+            }
+            finally
             {
                 dia_build = new AlertDialog.Builder(this);
 
@@ -104,24 +90,12 @@ public class Edit_note extends Activity implements View.OnClickListener
                 {
                     dia_build.setTitle("Edit applied");
                     dia_build.setMessage("and it cannot be undone or rolled back");
-                    dia_build.setPositiveButton("Okay", new DialogInterface.OnClickListener()
-                    {
-                        @Override public void onClick(DialogInterface dialog, int which)
-                        {
-                            Edit_note.this.finish();
-                        }
-                    });
+                    dia_build.setPositiveButton("Okay", (dialog, which) -> Edit_note.this.finish());
                 }
                 else
                 {
                     dia_build.setMessage("Nothing to add").setCancelable(false);
-                    dia_build.setPositiveButton("Needs more text", new DialogInterface.OnClickListener()
-                    {
-                        @Override public void onClick(DialogInterface dialog, int which)
-                        {
-                            Edit_note.this.finish();
-                        }
-                    });
+                    dia_build.setPositiveButton("Needs more text", (dialog, which) -> Edit_note.this.finish());
                 }
 
                 dia = dia_build.create();

@@ -6,8 +6,10 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
 /**
- * Save the preferences, which consist of font size only at the moment.
+ * Save the preferences.
  * Created by Christopher D. Harte on 13/07/2016.
+ * SharedPreferences are being replaced by dataStores, which are
+ * currently only written in kotlin. So get learning.
  */
 public class Prefs extends PreferenceActivity
 {

@@ -22,8 +22,8 @@ public class Add_note extends Activity implements OnClickListener
     private Sticky_database_utils utils;
     private EditText              add_note;
     private String                date_title;
-    private int font_size;
-    private  String font_name;
+    private int                   font_size;
+    private String                font_name;
 
     @Override protected void onCreate(Bundle savedInstanceState)
     {
@@ -80,41 +80,24 @@ public class Add_note extends Activity implements OnClickListener
 
                 dia_build.setTitle("Borked");
                 dia_build.setMessage("Cock up alert : " + error).setCancelable(false);
-                dia_build.setPositiveButton("Clear", new DialogInterface.OnClickListener()
-                {
-                    @Override public void onClick(DialogInterface dialog, int which)
-                    {
-                        Add_note.this.finish();
-                    }
-                });
+                dia_build.setPositiveButton("Clear", (dialog, which) -> Add_note.this.finish());
 
                 dia = dia_build.create();
                 dia.show();
-            } finally
+            }
+            finally
             {
                 dia_build = new AlertDialog.Builder(this);
 
                 if (verks)
                 {
                     dia_build.setMessage("Note has been added").setCancelable(false);
-                    dia_build.setPositiveButton("Okay Dokey", new DialogInterface.OnClickListener()
-                    {
-                        @Override public void onClick(DialogInterface dialog, int which)
-                        {
-                            Add_note.this.finish();
-                        }
-                    });
+                    dia_build.setPositiveButton("Okay Dokey", (dialog, which) -> Add_note.this.finish());
                 }
                 else
                 {
                     dia_build.setMessage("Nothing to add").setCancelable(false);
-                    dia_build.setPositiveButton("Try it with text next time", new DialogInterface.OnClickListener()
-                    {
-                        @Override public void onClick(DialogInterface dialog, int which)
-                        {
-                            Add_note.this.finish();
-                        }
-                    });
+                    dia_build.setPositiveButton("Try it with text next time", (dialog, which) -> Add_note.this.finish());
                 }
 
                 dia = dia_build.create();

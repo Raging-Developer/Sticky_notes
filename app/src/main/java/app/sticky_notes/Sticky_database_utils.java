@@ -18,7 +18,6 @@ class Sticky_database_utils
     private final Context my_context;
     private Db_helper my_helper;
     private SQLiteDatabase my_database;
-//    private ArrayList<Sticky_notes> results;
 
     private static final String database_name = "Sticky_notes";
     private static final String database_table = "notes";
@@ -28,7 +27,7 @@ class Sticky_database_utils
     private static final String key_title = "title";
     private static final String key_note = "note";
 
-    private String[] columns = new String[] {key_row_id, key_title, key_note};
+    private final String[] columns = new String[] {key_row_id, key_title, key_note};
 
 
     Sticky_database_utils (Context c)

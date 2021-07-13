@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class Sticky_Activity extends AppCompatActivity implements OnClickListener
 {
     private ArrayList<Sticky_notes>     notes;
-    public Sticky_database_utils        utils;
+    private Sticky_database_utils       utils;
     private static int                  font_size;
     private static String               font_name;
 
@@ -229,46 +229,37 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
             /*
              * Use an intent to call an activity to edit the note
              */
-            holder.txtNote.setOnClickListener(new View.OnClickListener()
-            {
-                @Override public void onClick(View view)
-                {
-                    String note_body = local_data.get(holder.getAdapterPosition()).get_note();
-                    record_no = Long.parseLong(local_data.get(holder.getAdapterPosition()).get_row_id());
+            holder.txtNote.setOnClickListener(view -> {
+                String note_body = local_data.get(holder.getAdapterPosition()).get_note();
+                record_no = Long.parseLong(local_data.get(holder.getAdapterPosition()).get_row_id());
 
+                Intent i = new Intent("app.sticky_notes.EDIT_NOTE");
+                i.putExtra("fong", Sticky_Activity.font_size);
+                i.putExtra("fonz", Sticky_Activity.font_name);
+                i.putExtra("note", note_body);
+                i.putExtra("row_id", record_no);
+                startActivity(i);
 
-                    Intent i = new Intent("app.sticky_notes.EDIT_NOTE");
-                    i.putExtra("fong", Sticky_Activity.font_size);
-                    i.putExtra("fonz", Sticky_Activity.font_name);
-                    i.putExtra("note", note_body);
-                    i.putExtra("row_id", record_no);
-                    startActivity(i);
+                notifyDataSetChanged();
 
-                    notifyDataSetChanged();
-
-                    holder.txtNote.setSelected(true);
-                }
+                holder.txtNote.setSelected(true);
             });
 
             /*
              * Use my callback class to delete the note.
-             * todo if the back arrow is clicked instead of the bin I need to return the colour to transparent
+             * if the back arrow is clicked instead of the bin I need to return the colour to transparent
              */
-            holder.txtNote.setOnLongClickListener(new View.OnLongClickListener()
-            {
-                @Override public boolean onLongClick(View view)
-                {
-                    holder.txtNote.setSelected(true);
+            holder.txtNote.setOnLongClickListener(view -> {
+                holder.txtNote.setSelected(true);
 
-                    record_no = Long.parseLong(local_data.get(holder.getAdapterPosition()).get_row_id());
+                record_no = Long.parseLong(local_data.get(holder.getAdapterPosition()).get_row_id());
 
-                    holder.txtNote.setBackgroundColor(Color.BLUE);
+                holder.txtNote.setBackgroundColor(Color.BLUE);
 
-                    My_action_callback call_back_mode = new My_action_callback();
-                    startActionMode(call_back_mode);
+                My_action_callback call_back_mode = new My_action_callback();
+                startActionMode(call_back_mode);
 
-                    return true;
-                }
+                return true;
             });
 
             holder.txtNote.setTypeface(fonts);
