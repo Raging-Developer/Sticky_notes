@@ -127,10 +127,9 @@ public class Sticky_Activity extends AppCompatActivity implements OnClickListene
         else if (itemId == android.R.id.home)
         {
             finish();
-
-            //Using a fragment will not reload the activity with the new saved font size,
-            //this way will. Otherwise I will have to use recreate() which is a bit overkill.
         }
+        //Using a fragment will not reload the activity with the new saved font size,
+        //this way will. Otherwise I will have to use recreate() which is a bit overkill.
         else if (itemId == R.id.action_settings)
         {
             Intent p = new Intent("app.sticky_notes.PREFS");
