@@ -10,17 +10,16 @@ import android.widget.TextView;
  */
 public class Credit extends Activity
 {
-    @Override protected void onCreate(Bundle savedInstanceState)
-    {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         String title = "";
         String text = "";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.credit);
         TextView credit = findViewById(R.id.credit);
-
         Bundle b = getIntent().getExtras();
-        if (b != null)
-        {
+
+        if (b != null) {
             title = b.getString("title");
             text = b.getString("text");
         }

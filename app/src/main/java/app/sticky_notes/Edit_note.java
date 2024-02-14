@@ -21,16 +21,15 @@ public class Edit_note extends Activity implements View.OnClickListener
     private int                   font_size;
     private String                font_name;
 
-    @Override protected void onCreate(Bundle savedInstanceState)
-    {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit);
         edited_note          = findViewById(R.id.edit_text);
         Button update_button = findViewById(R.id.button_edit_note);
         Bundle b             = getIntent().getExtras();
 
-        if (b != null)
-        {
+        if (b != null) {
             font_size = b.getInt("fong");
             font_name = b.getString("fonz");
             row_id    = b.getLong("row_id");
@@ -39,26 +38,22 @@ public class Edit_note extends Activity implements View.OnClickListener
 
         Typeface fonts = Typeface.createFromAsset(getAssets(), "fonts/" + font_name);
         utils          = new Sticky_database_utils(this);
-
         edited_note.setTextSize(font_size);
         edited_note.setTypeface(fonts);
 
         update_button.setOnClickListener(this);
     }
 
-    @Override public void onClick(View v)
-    {
+    @Override
+    public void onClick(View v) {
         AlertDialog.Builder dia_build;
         AlertDialog dia;
 
-        if (v.getId() == R.id.button_edit_note)
-        {
+        if (v.getId() == R.id.button_edit_note) {
             boolean verks = true;
 
-            try
-            {
-                if (edited_note.getText().toString().trim().length() == 0)
-                {
+            try {
+                if (edited_note.getText().toString().trim().length() == 0) {
                     verks = false;
                     return;
                 }
@@ -67,8 +62,7 @@ public class Edit_note extends Activity implements View.OnClickListener
                 utils.edit_entry(edited_note.getText().toString(), row_id);
                 utils.close();
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 verks = false;
                 String error = e.toString();
 
@@ -82,18 +76,15 @@ public class Edit_note extends Activity implements View.OnClickListener
                 dia.show();
 
             }
-            finally
-            {
+            finally {
                 dia_build = new AlertDialog.Builder(this);
 
-                if (verks)
-                {
+                if (verks) {
                     dia_build.setTitle("Edit applied");
                     dia_build.setMessage("and it cannot be undone or rolled back");
                     dia_build.setPositiveButton("Okay", (dialog, which) -> Edit_note.this.finish());
                 }
-                else
-                {
+                else {
                     dia_build.setMessage("Nothing to add").setCancelable(false);
                     dia_build.setPositiveButton("Needs more text", (dialog, which) -> Edit_note.this.finish());
                 }
